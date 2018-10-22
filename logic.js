@@ -1,5 +1,7 @@
-// The predetermined topics displayed on the initial load
-let topics = ["Adele", "Florence and the Machine", "Bloc Party", "Foo Fighters", "Death Cab for Cutie", "Mumford and Sons", "Childish Gambino"];
+let previousTopic,
+    offset,
+    // The predetermined topics displayed on the initial load
+    topics = ["Adele", "Florence and the Machine", "Bloc Party", "Foo Fighters", "Death Cab for Cutie", "Mumford and Sons", "Childish Gambino"];
 
 
 // Creates buttons for each topic
@@ -28,15 +30,14 @@ function makeButtons() {
 
 
 // Grabs gifs from Giphy
-function giphy(topic) {
+function giphy(topic, offset) {
     let queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        topic + "&api_key=dc6zaTOxFJmzC&limit=10";
+        topic + "&api_key=dc6zaTOxFJmzC&limit=10&offset=" + offset;
 
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function (response) {
-        console.log(response);
         response.data.forEach(gif => {
             let container = document.createElement("article");
             container.setAttribute("class", "m-3");
@@ -65,7 +66,7 @@ function giphy(topic) {
 
 
 // Adds a button as directed by the user
-$("#add-topic").on("click", function(event) {
+$("#add-topic").on("click", function (event) {
     event.preventDefault();
     let topic = document.getElementById("searchForTopic").value.trim();
     topics.push(topic);
@@ -74,7 +75,7 @@ $("#add-topic").on("click", function(event) {
 
 
 // Starts and stops the gif
-$(document).on("click", ".gif", function() {
+$(document).on("click", ".gif", function () {
     let url = this.getAttribute("src");
     let state = this.getAttribute("data-state");
     let gif = ".gif";
@@ -91,22 +92,33 @@ $(document).on("click", ".gif", function() {
     };
 
     // Reassembles the url
-    url +=  gif + urlDisassembled[1];
+    url += gif + urlDisassembled[1];
     this.setAttribute("src", url);
 });
 
 
-// Runs Giphy
+// Runs Giphy and BandsInTown
 $(document).on("click", ".topic", function () {
     let container = document.getElementById("display-gifs");
 
-    // Removes the previous gifs if they exist
-    while (container.lastChild) {
-        container.removeChild(container.lastChild);
+    let topic = this.getAttribute("data-topic");
+
+    if (topic !== previousTopic) {
+        offset = 0;
+
+        // Removes the previous gifs if they exist
+        while (container.lastChild) {
+            container.removeChild(container.lastChild);
+        };
+
+        previousTopic = topic;
+    } else {
+        // Adjusts the gifs shown if the same topic were chosen again
+        offset += 10;
     };
 
-    let topic = this.getAttribute("data-topic");
-    giphy(topic);
+    giphy(topic, offset);
+    // bandsInTown(topic);
 });
 
 
