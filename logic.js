@@ -51,20 +51,31 @@ function giphy(topic, offset) {
             rating.className = "card-text";
             rating.textContent = "Rated: " + gif.rating;
 
+            // Creates a download button
+            let downloadButton = document.createElement("button");
+            downloadButton.className = "download btn btn-outline-secondary border-0 fas fa-download";
+
             // Creates a favorite button
             let favoriteButton = document.createElement("button");
-            favoriteButton.className = "favorite btn btn-lg btn-outline-secondary border-0 fas fa-heart";
+            favoriteButton.className = "favorite btn btn-outline-secondary border-0 fas fa-heart";
 
-            // Wraps around the rating and favorite button
+            // Creates a wrapper for the buttons
+            let buttonWrapper = document.createElement("div");
+            buttonWrapper.className = "btn-group btn-group-lg";
+            buttonWrapper.appendChild(downloadButton);
+            buttonWrapper.appendChild(favoriteButton);
+
+            // Wraps around the rating and buttons
             let cardBody = document.createElement("div");
             cardBody.className = "card-body text-center";
             cardBody.appendChild(rating);
-            cardBody.appendChild(favoriteButton);
+            cardBody.appendChild(buttonWrapper);
 
             // Creates the gif image
             let image = document.createElement("img");
             image.className = "gif img-fluid card-img-top";
             image.src = gif.images.fixed_height_still.url;
+            image.alt = "";
 
             // Wraps the container around the gif image, the rating, and the favorite button
             container.appendChild(image);
@@ -82,7 +93,7 @@ function giphy(topic, offset) {
 
 // Displays artist information via Bands in Town
 function bandsInTown(artist) {
-    let container = document.getElementById("bandsInTown");
+    let container = document.getElementById("bands-in-town");
     container.className = "text-center";
     let queryURL = "https://rest.bandsintown.com/artists/" + artist + "?app_id=codingbootcamp";
 
@@ -108,6 +119,7 @@ function bandsInTown(artist) {
         let artistImage = document.createElement("img");
         artistImage.className = "img-fluid";
         artistImage.src = response.thumb_url;
+        artistImage.alt = "";
 
         // Displays the artist's name and thumbnail
         container.appendChild(artistName);
@@ -234,7 +246,7 @@ function emptyContainer(container) {
 $("#add-topic").on("click", function (event) {
     // Prevents the submit action of the button (which would refresh the page)
     event.preventDefault();
-    let search = document.getElementById("searchForTopic");
+    let search = document.getElementById("search-for-topic");
     let topic = search.value.trim();
 
     // Clears the search bar
@@ -292,7 +304,7 @@ $(document).on("click", ".topic", function () {
 // Keeps track of favorite gifs
 $(document).on("click", ".favorite", function () {
     // Goes up to the card body div, then to the preceding image, and gets its source
-    let imageURL = this.parentElement.previousElementSibling.src;
+    let imageURL = this.parentElement.parentElement.previousElementSibling.src;
 
     // Selects the first h1 in the document, goes to its first child (the hyperlink), and gets its text
     let topic = document.getElementsByTagName("h1")[0].childNodes[0].text;
@@ -324,7 +336,7 @@ $(document).on("click", ".favorite", function () {
 
 // Displays all the favorite gifs on the page by topic
 $("#view-favorites").on("click", function () {
-    let bandsInTown = document.getElementById("bandsInTown");
+    let bandsInTown = document.getElementById("bands-in-town");
     let displayGifs = document.getElementById("display-gifs");
 
     // Clear the styling for the container so that it doesn't interfere with the headers
@@ -345,6 +357,7 @@ $("#view-favorites").on("click", function () {
         let image = document.createElement("img");
         image.className = "gif img-fluid m-1";
         image.src = gif.image;
+        image.alt = "";
 
         // Makes a header and container for the gif if it doesn't already exist
         if (headers.indexOf(gif.topic) === -1) {
@@ -355,12 +368,12 @@ $("#view-favorites").on("click", function () {
 
             let gifContainerForHeader = document.createElement("section");
             gifContainerForHeader.className = "d-flex flex-wrap justify-content-center mb-3";
-            gifContainerForHeader.id = gif.topic;
+            gifContainerForHeader.id = gif.topic.replace(/\s+/g,''); // regex to replace whitespace
             newHeader.insertAdjacentElement("afterend", gifContainerForHeader);
         };
 
         // Appends the gif to the section for its topic
-        document.getElementById(gif.topic).appendChild(image);
+        document.getElementById(gif.topic.replace(/\s+/g,'')).appendChild(image);
     });
 });
 
@@ -397,6 +410,33 @@ function readCookie(name) {
 
     return null;
 };
+
+
+// Downloads a gif
+$(document).on("click", ".download", function () {
+    // Goes up to the card body div, then to the preceding image, and gets its source
+    let imageURL = this.parentElement.parentElement.previousElementSibling.src;
+    let still = "_s";
+    let gif = ".gif";
+
+    // Edits the image's URL to match the animated gif if it were static
+    if (imageURL.indexOf(still) !== -1) {
+        imageURL = imageURL.split(gif)[0].slice(0, -still.length) + gif + imageURL.split(gif)[1];
+    };
+
+    // Selects the first h1 in the document, goes to its first child (the hyperlink), and gets its text
+    let topic = document.getElementsByTagName("h1")[0].childNodes[0].text + gif;
+
+    // Shamelessly stolen from the download.js documentation
+    let x = new XMLHttpRequest();
+    x.open("GET", imageURL, true);
+    x.responseType = 'blob';
+    x.onload = function (e) {
+        download(x.response, topic, "image/gif");
+    };
+    x.send();
+});
+
 
 makeFavoriteGifs();
 makeButtons();
