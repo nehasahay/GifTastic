@@ -2,44 +2,60 @@
 <html lang="en">
 
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-    crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
 
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
-    crossorigin="anonymous">
+    <!-- FontAwesome CSS  -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+        crossorigin="anonymous">
 
-  <title>GifTastic</title>
+    <title>GifTastic</title>
+
+    <!-- Just to account for iPhone 5 resolutions for events display -->
+    <style>
+        @media (max-width: 372px) {
+            .btn-lg {
+                font-size: 90%;
+            }
+
+            .display-4 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <!-- <main class="container border px-4"> -->
-  <main class="container bg-white border p-3" style="opacity: 0.9;">
-    <section class="text-center mb-3" id="buttons"></section>
-    <form>
-      <div class="input-group mb-3">
-        <input type="search" class="form-control" placeholder="Add an artist!" id="searchForTopic">
-        <div class="input-group-append">
-          <button type="submit" class="btn btn-outline-secondary fas fa-search" id="add-topic"></button>
-        </div>
-      </div>
-    </form>
-    <section id="bandsInTown"></section>
-    <section class="d-flex flex-wrap justify-content-center" id="display-gifs"></section>
-  </main>
+    <main class="container border p-3" style="background-color:rgba(255, 255, 255, 0.9)">
+        <nav class="text-center mb-3" id="buttons"></nav>
+        <form>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <button type="button" class="btn btn-outline-secondary fas fa-heart" id="view-favorites"></button>
+                </div>
+                <input type="search" class="form-control" placeholder="Add an artist!" id="searchForTopic">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline-secondary fas fa-search" id="add-topic"></button>
+                </div>
+            </div>
+        </form>
+        <article id="bandsInTown"></article>
+        <section id="display-gifs"></section>
+    </main>
 
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-    crossorigin="anonymous"></script>
-  <script src="logic.js"></script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+    <script src="logic.js"></script>
 </body>
 
 </html>
